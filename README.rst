@@ -71,6 +71,11 @@ Use the following settings to configure AliCloud OSS file storage.
     # Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
     OSS_ENDPOINT = <Your access endpoint>
 
+    # When you configed bucket with CNAME(custom domain), provide OSS_CNAME for signing url
+    # OSS_ENDPOINT will still be used for puting files
+    # https://help.aliyun.com/document_detail/31836.html
+    OSS_CNAME = <Your bucket custom domain>
+
     # The default location for your files
     MEDIA_URL = '/media/'
 

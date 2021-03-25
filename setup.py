@@ -22,15 +22,17 @@ with open('README.rst', 'rb') as f:
     readme = f.read().decode('utf-8')
 
 setup(
-    name='django-oss-storage',
+    name='ifournight-django-oss-storage',
     version=version,
     description='Django Aliyun OSS (Object Storage Service) storage',
+    author='Song hui',
+    author_email='ifournight@gmail.com',
     long_description=readme,
     packages=['django_oss_storage'],
     install_requires=['django>=1.10',
                       'oss2>=2.3.3'],
     include_package_data=True,
-    url='https://www.aliyun.com/product/oss',
+    url='https://github.com/ifournight/django-oss-storage/',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
