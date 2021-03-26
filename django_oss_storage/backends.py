@@ -26,14 +26,14 @@ from oss2 import Auth, Service, Bucket, ObjectIterator, BUCKET_ACL_PRIVATE
 from .defaults import logger
 
 
-def _get_config(name, default=None):
+def _get_config(name, default=None, required=True):
     config = os.environ.get(name, getattr(settings, name, default))
     if config is not None:
         if isinstance(config, six.string_types):
             return config.strip()
         else:
             return config
-    else:
+    elif required:
         raise ImproperlyConfigured("'%s not found in env variables or setting.py" % name)
 
 
@@ -60,7 +60,7 @@ class OssStorage(Storage):
         self.access_key_id = access_key_id if access_key_id else _get_config('OSS_ACCESS_KEY_ID')
         self.access_key_secret = access_key_secret if access_key_secret else _get_config('OSS_ACCESS_KEY_SECRET')
         self.end_point = _normalize_endpoint(end_point if end_point else _get_config('OSS_ENDPOINT'))
-        self.cname = _normalize_endpoint(cname if cname else _get_config('OSS_CNAME'))
+        self.cname = cname if cname else _get_config('OSS_CNAME', required=False)
         self.bucket_name = bucket_name if bucket_name else _get_config('OSS_BUCKET_NAME')
         self.expire_time = expire_time if expire_time else int(_get_config('OSS_EXPIRE_TIME', default=60*60*24*30))
 
@@ -68,6 +68,7 @@ class OssStorage(Storage):
         self.service = Service(self.auth, self.end_point)
         self.bucket = Bucket(self.auth, self.end_point, self.bucket_name)
         if self.cname:
+            self.cname = _normalize_endpoint(self.cname)
             self.cname_bucket = Bucket(self.auth, self.cname, self.bucket_name, is_cname=True)
 
         # try to get bucket acl to check bucket exist or not
